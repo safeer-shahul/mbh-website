@@ -7,11 +7,11 @@ export async function getAllServices() {
   const res = await api.get("/services", {
     params: {
       locale: lang,
-      "populate[sections][populate]": "bullet_points",
+      populate: "*", // required for localized title/slug
     },
   });
 
-  return res.data.data;
+  return res.data.data; // return raw data
 }
 
 export async function getServiceBySlug(slug: string) {
@@ -21,7 +21,7 @@ export async function getServiceBySlug(slug: string) {
     params: {
       locale: lang,
       "filters[slug][$eq]": slug,
-      "populate[sections][populate]": "bullet_points",
+      populate: "*",
     },
   });
 

@@ -1,13 +1,25 @@
 {
-    "menu_home": "الرئيسية",
-    "menu_about": "من نحن",
-    "menu_services": "الخدمات",
-    "menu_blog": "المدونة",
-    "menu_team": "فريق العمل",
-    "menu_contact": "اتصل بنا",
-    "menu_book": "احجز موعد",
-  
-    "lang_en": "En",
-    "lang_ar": "ع"
-  }
-  
+  "menu_home": "الرئيسية",
+  "menu_about": "من نحن",
+  "menu_services": "الخدمات",
+  "menu_blog": "المدونة",
+  "menu_team": "فريق العمل",
+  "menu_contact": "اتصل بنا",
+  "menu_book": "احجز موعد",
+  "lang_en": "En",
+  "lang_ar": "ع",
+  "search_placeholder": "ابحث...",
+  "footer_email_placeholder": "البريد الإلكتروني",
+  "footer_subscribe": "اشتراك",
+  "footer_contact": "تواصل",
+  "footer_about": "من نحن",
+  "footer_strategy": "استراتيجيتنا",
+  "footer_advantages": "مميزاتنا",
+  "footer_social": "المسؤولية الاجتماعية",
+  "footer_services": "خدماتنا",
+  "invalid_email": "بريد غير صالح",
+  "required_email": "البريد مطلوب",
+  "email_exists": "البريد مشترك بالفعل",
+  "email_success": "تم الاشتراك بنجاح",
+  "email_error": "حدث خطأ غير متوقع"
+}
