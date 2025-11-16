@@ -1,5 +1,3 @@
-// src/services/subscriberApi.ts
-
 import api from "./api";
 
 /**

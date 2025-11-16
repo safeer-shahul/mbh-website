@@ -1,11 +1,6 @@
-//src/services/heroApi.ts
-
 import api from "./api";
-import { getLangCookie } from "@/utils/cookies";
 
-export async function getHeroSlides() {
-  const lang = await getLangCookie();
-
+export async function getHeroSlides(lang: string) {
   const res = await api.get("/hero-slides", {
     params: {
       locale: lang,
@@ -14,5 +9,5 @@ export async function getHeroSlides() {
     },
   });
 
-  return res.data.data;
+  return res.data.data || [];
 }

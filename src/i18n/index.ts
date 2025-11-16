@@ -1,5 +1,3 @@
-// src/i18n/index.ts
-
 "use client";
 
 import i18n from "i18next";
@@ -12,12 +10,12 @@ if (!i18n.isInitialized) {
   i18n
     .use(initReactI18next)
     .init({
+      lng: "en", // temporary default
+      fallbackLng: "en",
       resources: {
         en: { translation: en },
-        ar: { translation: ar }
+        ar: { translation: ar },
       },
-      lng: "en",
-      fallbackLng: "en",
       interpolation: { escapeValue: false },
     });
 }

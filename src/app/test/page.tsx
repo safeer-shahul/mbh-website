@@ -2,10 +2,13 @@
 
 import { useEffect } from "react";
 import { getAllServices } from "@/services/servicesApi";
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
 
 export default function TestPage() {
+  const lang = useSelector((state: RootState) => state.language.lang);
   useEffect(() => {
-    getAllServices().then((data) => {
+    getAllServices(lang).then((data) => {
       console.log("SERVICES DATA:", data);
     });
   }, []);

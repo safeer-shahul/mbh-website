@@ -1,4 +1,3 @@
-// src/redux/searchSlice.ts
 import { createSlice } from "@reduxjs/toolkit";
 
 interface SearchState {
