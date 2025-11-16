@@ -1,5 +1,3 @@
-// src/components/Header.tsx
-
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -14,8 +12,8 @@ import { setLanguage } from "@/redux/languageSlice";
 import { setQuery as setSearchQuery } from "@/redux/searchSlice";
 
 import { getAllServices } from "@/services/servicesApi";
-import ServicesDropdown from "./ServicesDropdown";
-import MobileMenu from "./MobileMenu";
+import ServicesDropdown from "@/components/navigation/ServicesDropdown";
+import MobileMenu from "@/components/navigation/MobileMenu";
 
 export default function Header() {
   const router = useRouter();
@@ -35,7 +33,7 @@ export default function Header() {
     let mounted = true;
     (async () => {
       try {
-        const list = await getAllServices();
+        const list = await getAllServices(lang);
         if (!mounted) return;
 console.log(list,'list')
         const normalized =
@@ -96,7 +94,6 @@ console.log(list,'list')
     try {
       await fetch("/api/lang", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ lang: newLang }),
       });
     } catch {}
@@ -141,7 +138,6 @@ console.log(list,'list')
               <Link href="/">{i18n.t("menu_home")}</Link>
               <Link href="/about">{i18n.t("menu_about")}</Link>
 
-              {/* SERVICES MENU TRIGGER - Extended hover area */}
               <div
                 onMouseEnter={() => setShowServices(true)}
                 onMouseLeave={() => setShowServices(false)}
@@ -150,7 +146,6 @@ console.log(list,'list')
                 <button className="inline-flex items-center gap-1 py-2">
                   {i18n.t("menu_services")}
                 </button>
-                {/* Invisible bridge to connect button to dropdown */}
                 {showServices && (
                   <div className="absolute left-0 right-0 h-8 -bottom-8" />
                 )}
@@ -206,13 +201,12 @@ console.log(list,'list')
               {lang === "en" ? i18n.t("lang_en") : i18n.t("lang_ar")}
             </button>
 
-            <button className="hidden md:inline-block px-4 py-2 rounded border">
+            <button className="hidden md:inline-block px-4 py-2 rounded-lg border">
               {i18n.t("menu_book")}
             </button>
           </div>
         </div>
 
-        {/* MEGA MENU - Positioned directly below header */}
         {showServices && (
           <div
             className="absolute left-0 right-0 top-full"
@@ -243,3 +237,4 @@ console.log(list,'list')
     </>
   );
 }
+

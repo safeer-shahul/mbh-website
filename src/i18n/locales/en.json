@@ -6,6 +6,7 @@
   "menu_team": "Our Team",
   "menu_contact": "Contact",
   "menu_book": "Book Appointment",
+  "team_subheading": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s",
   "lang_en": "En",
   "lang_ar": "ع",
   "search_placeholder": "Search...",
@@ -21,5 +22,10 @@
   "required_email": "Email required",
   "email_exists": "Already subscribed",
   "email_success": "Subscribed successfully",
-  "email_error": "Something went wrong"
+  "email_error": "Something went wrong",
+  "footer_rights": "All rights reserved",
+  "testimonials_heading": "What our clients are saying",
+  "testimonials_subheading": "Our clients range from individual investors, to local, international as well as fortune 500 companies.Our clients range from individual investors, to local, international as well as fortune 500 companies.",
+  "back": "Back",
+  "service_not_found": "Service not found"
 }

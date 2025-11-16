@@ -1,7 +1,12 @@
-//src/app/page.tsx
-
-import Hero from "@/components/Hero";
+import Hero from "@/components/sections/Hero";
+import Teams from "@/components/sections/Teams";
+import Testimonials from "@/components/sections/Testimonials";
 
 export default function Home() {
-  return <Hero />;
+  return <>
+    <Hero />
+    <Teams />
+    <Testimonials />
+  </>
+    ;
 }

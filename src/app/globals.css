@@ -1,50 +1,94 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
 
+
+@import "tailwindcss";
 @import "swiper/css";
 @import "swiper/css/navigation";
 @import "swiper/css/pagination";
 
 
-:root{
-  --color-brown: #4b2616;
-  --color-brown-dark: #3B221F;
+:root {
+  --font-en: "DM Sans", sans-serif;
+  --font-ar: "Cairo", sans-serif;
+
+  /* default font = English */
+  --font-sans: var(--font-en);
+}
+
+html[dir="rtl"] {
+  --font-sans: var(--font-ar);
+}
+
+html, body {
+  font-family: var(--font-sans);
+}
+
+:root {
+  --color-brown: #4a2516;
+  --color-brown-dark: #4B2615;
   --color-white: #FFFFFF;
   --color-black: #000000;
 }
 
-.swiper-button-next,
-.swiper-button-prev {
-  color: white !important;
-  width: 40px;
-  height: 40px;
-}
-
-.swiper-button-next:after,
-.swiper-button-prev:after {
-  font-size: 22px !important;
-}
-
-/* Move pagination dots vertically to left side */
-.hero-pagination.swiper-pagination-bullets {
+.hero-pagination {
   position: absolute !important;
-  top: 50%;
-  left: 30px;
-  transform: translateY(-50%);
   display: flex !important;
-  flex-direction: column;
-  gap: 8px;
+  gap: 12px !important;
+  width: auto !important;
+  z-index: 20 !important;
+  bottom: 24px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  flex-direction: row !important;
+  align-items: center !important;
+}
+
+@media (min-width: 768px) {
+  .hero-pagination {
+    bottom: auto !important;
+    left: 66px !important;
+    top: calc(50% + 50px) !important;
+    transform: translateX(-50%) !important;
+    flex-direction: column !important;
+  }
+
+  .hero-pagination-rtl {
+    left: auto !important;
+    right: 66px !important;
+    transform: translateX(50%) !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-pagination {
+    left: 82px !important;
+  }
+
+  .hero-pagination-rtl {
+    left: auto !important;
+    right: 82px !important;
+  }
 }
 
 .hero-pagination .swiper-pagination-bullet {
-  width: 10px;
-  height: 10px;
-  background: white;
-  opacity: 0.4;
-  border-radius: 50%;
-  transition: 0.3s;
+  width: 14px !important;
+  height: 14px !important;
+  background: transparent !important;
+  border: 2px solid rgba(255, 255, 255, 0.7) !important;
+  opacity: 1 !important;
+  border-radius: 50% !important;
+  margin: 0 !important;
+  transition: all 0.3s ease !important;
+  cursor: pointer !important;
 }
 
 .hero-pagination .swiper-pagination-bullet-active {
-  opacity: 1;
-  background: #ffffff;
+  background: white !important;
+  border-color: white !important;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  display: none !important;
 }
