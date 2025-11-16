@@ -1,13 +1,25 @@
 {
-    "menu_home": "Home",
-    "menu_about": "About us",
-    "menu_services": "Services",
-    "menu_blog": "Blog",
-    "menu_team": "Our Team",
-    "menu_contact": "Contact us",
-    "menu_book": "Book Appointment",
-    
-    "lang_en": "En",
-    "lang_ar": "ع"
-  }
-  
+  "menu_home": "Home",
+  "menu_about": "About us",
+  "menu_services": "Services",
+  "menu_blog": "Blog",
+  "menu_team": "Our Team",
+  "menu_contact": "Contact",
+  "menu_book": "Book Appointment",
+  "lang_en": "En",
+  "lang_ar": "ع",
+  "search_placeholder": "Search...",
+  "footer_email_placeholder": "Email",
+  "footer_subscribe": "Subscribe",
+  "footer_contact": "Contacts",
+  "footer_about": "About",
+  "footer_strategy": "Our Strategy",
+  "footer_advantages": "Our Advantages",
+  "footer_social": "Social Responsibility",
+  "footer_services": "Our Services",
+  "invalid_email": "Invalid email",
+  "required_email": "Email required",
+  "email_exists": "Already subscribed",
+  "email_success": "Subscribed successfully",
+  "email_error": "Something went wrong"
+}

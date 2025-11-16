@@ -1,3 +1,5 @@
+// src/components/ServicesDropdown.tsx
+
 "use client";
 
 import React from "react";
@@ -18,17 +20,18 @@ function chunk<T>(arr: T[], n: number) {
 
 export default function ServicesDropdown({ services }: { services: Service[] }) {
   const cols = chunk(services || [], 4);
-
+console.log(services,'services')
   return (
-    <div className="w-full bg-[var(--color-brown)] text-white rounded-b-2xl p-8 shadow-xl">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div className="w-full bg-[var(--color-brown)] text-white py-10 shadow-xl 
+                    rounded-b-2xl border-t border-white/10">
+      <div className="max-w-7xl mx-auto px-12 grid grid-cols-1 md:grid-cols-4 gap-10">
         {cols.map((col, i) => (
-          <div key={i} className="space-y-3">
+          <div key={i} className="space-y-4">
             {col.map((s) => (
               <Link
                 key={s.id}
                 href={`/services/${s.slug}`}
-                className="block text-sm hover:underline"
+                className="block text-base hover:opacity-80 transition"
               >
                 {s.title}
               </Link>

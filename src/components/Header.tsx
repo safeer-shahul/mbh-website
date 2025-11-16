@@ -1,13 +1,17 @@
+// src/components/Header.tsx
+
 "use client";
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useSelector, useDispatch } from "react-redux";
-import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { FiSearch, FiX, FiMenu } from "react-icons/fi";
+import i18n from "@/i18n";
 
 import { RootState } from "@/redux/store";
 import { setLanguage } from "@/redux/languageSlice";
+import { setQuery as setSearchQuery } from "@/redux/searchSlice";
 
 import { getAllServices } from "@/services/servicesApi";
 import ServicesDropdown from "./ServicesDropdown";
@@ -16,109 +20,210 @@ import MobileMenu from "./MobileMenu";
 export default function Header() {
   const router = useRouter();
   const dispatch = useDispatch();
-
   const lang = useSelector((state: RootState) => state.language.lang);
-  const { t } = useTranslation(); // ✅ IMPORTANT
 
   const [services, setServices] = useState<any[]>([]);
   const [showServices, setShowServices] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
 
   const path = usePathname();
 
-  // Re-fetch services when language changes
   useEffect(() => {
-    getAllServices().then((res) => {
-      if (Array.isArray(res?.data)) setServices(res.data);
-    });
+    let mounted = true;
+    (async () => {
+      try {
+        const list = await getAllServices();
+        if (!mounted) return;
+console.log(list,'list')
+        const normalized =
+          list?.map((item: any) => ({
+            id: item.id,
+            title: item.title,
+            slug: item.slug,
+          })) || [];
+
+        setServices(normalized);
+      } catch {
+        setServices([]);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
   }, [lang]);
 
   useEffect(() => {
     const onScroll = () => setIsSticky(window.scrollY > 80);
-    window.addEventListener("scroll", onScroll);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => setShowServices(false), [path]);
+  useEffect(() => {
+    setShowServices(false);
+  }, [path]);
+
+  function openSearch() {
+    setShowSearch(true);
+    setSearchInput("");
+  }
+
+  function closeSearch() {
+    setShowSearch(false);
+    setSearchInput("");
+  }
+
+  function submitSearch(q?: string) {
+    const query = (q ?? searchInput).trim();
+    if (!query) return;
+    dispatch(setSearchQuery(query) as any);
+    router.push(`/search?q=${encodeURIComponent(query)}`);
+    setShowSearch(false);
+  }
 
   async function onToggleLang() {
     const newLang = lang === "en" ? "ar" : "en";
 
-    dispatch(setLanguage(newLang)); // redux + i18n sync
+    try {
+      i18n.changeLanguage(newLang);
+    } catch {}
 
-    await fetch("/api/lang", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ lang: newLang }),
-    });
+    dispatch(setLanguage(newLang) as any);
 
-    router.refresh(); // refresh SSR components
+    try {
+      await fetch("/api/lang", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lang: newLang }),
+      });
+    } catch {}
+
+    router.refresh();
   }
 
   return (
     <>
       <header
-        className={`fixed w-full top-0 z-50 transition-all duration-300 ${
-          isSticky ? "bg-[var(--color-brown)]/90 shadow" : "bg-transparent"
+        className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
+          showServices
+            ? "bg-[var(--color-brown)]"
+            : isSticky
+            ? "bg-[var(--color-brown)]/90 shadow"
+            : "bg-transparent"
         }`}
       >
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
-          
-          {/* LOGO */}
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-2 py-4">
+
           <div className="flex items-center gap-4">
-            <button className="md:hidden" onClick={() => setMobileOpen(true)}>
-              ☰
+            <button
+              className="md:hidden text-white"
+              onClick={() => setMobileOpen(true)}
+              aria-label="open menu"
+            >
+              <FiMenu size={20} />
             </button>
 
-            <Link href="/">
-              <img src="/logo.png" className="h-10" />
+            <Link href="/" className="flex items-center">
+              <img src="/logo.png" alt="logo" className="h-12" />
             </Link>
           </div>
 
-          {/* DESKTOP NAV */}
-          <nav
-            className={`hidden md:flex gap-8 text-white ${
-              showSearch ? "opacity-0 pointer-events-none" : "opacity-100"
-            }`}
-          >
-            <Link href="/">{t("menu_home")}</Link>
-            <Link href="/about">{t("menu_about")}</Link>
+          <div className="flex-1 flex items-center justify-center">
 
-            <div
-              onMouseEnter={() => setShowServices(true)}
-              onMouseLeave={() => setShowServices(false)}
-              className="relative"
+            <nav
+              className={`hidden md:flex gap-8 items-center text-white ${
+                showSearch ? "opacity-0 pointer-events-none" : "opacity-100"
+              }`}
             >
-              <button>{t("menu_services")}</button>
+              <Link href="/">{i18n.t("menu_home")}</Link>
+              <Link href="/about">{i18n.t("menu_about")}</Link>
 
-              {showServices && (
-                <div className="absolute left-0 top-full w-[900px] mt-3">
-                  <ServicesDropdown services={services} />
-                </div>
-              )}
+              {/* SERVICES MENU TRIGGER - Extended hover area */}
+              <div
+                onMouseEnter={() => setShowServices(true)}
+                onMouseLeave={() => setShowServices(false)}
+                className="relative"
+              >
+                <button className="inline-flex items-center gap-1 py-2">
+                  {i18n.t("menu_services")}
+                </button>
+                {/* Invisible bridge to connect button to dropdown */}
+                {showServices && (
+                  <div className="absolute left-0 right-0 h-8 -bottom-8" />
+                )}
+              </div>
+
+              <Link href="/blog">{i18n.t("menu_blog")}</Link>
+              <Link href="/team">{i18n.t("menu_team")}</Link>
+              <Link href="/contact">{i18n.t("menu_contact")}</Link>
+            </nav>
+
+            <div className={`w-full max-w-xl ${showSearch ? "block" : "hidden"}`}>
+              <div className="flex items-center gap-2">
+                <input
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") submitSearch();
+                    if (e.key === "Escape") closeSearch();
+                  }}
+                  className="w-full px-4 py-2 rounded bg-white text-black focus:outline-none"
+                  placeholder={i18n.t("search_placeholder")}
+                  autoFocus
+                />
+
+                <button
+                  onClick={() => submitSearch()}
+                  className="px-3 py-2 rounded bg-[var(--color-brown)] text-white"
+                >
+                  <FiSearch />
+                </button>
+
+                <button onClick={closeSearch} className="px-3 py-2 text-white">
+                  <FiX />
+                </button>
+              </div>
             </div>
+          </div>
 
-            <Link href="/blog">{t("menu_blog")}</Link>
-            <Link href="/team">{t("menu_team")}</Link>
-            <Link href="/contact">{t("menu_contact")}</Link>
-          </nav>
-
-          {/* RIGHT BUTTONS */}
           <div className="flex items-center gap-3 text-white">
+            {!showSearch && (
+              <button
+                onClick={openSearch}
+                className="p-2 rounded-full text-white hidden md:inline-flex"
+              >
+                <FiSearch size={18} />
+              </button>
+            )}
+
             <button
               onClick={onToggleLang}
-              className="px-3 py-1 rounded border"
+              className="px-3 py-1 rounded border text-sm"
             >
-              {t(lang === "en" ? "lang_en" : "lang_ar")}
+              {lang === "en" ? i18n.t("lang_en") : i18n.t("lang_ar")}
             </button>
 
-            <button className="hidden md:block px-4 py-2 rounded border">
-              {t("menu_book")}
+            <button className="hidden md:inline-block px-4 py-2 rounded border">
+              {i18n.t("menu_book")}
             </button>
           </div>
         </div>
+
+        {/* MEGA MENU - Positioned directly below header */}
+        {showServices && (
+          <div
+            className="absolute left-0 right-0 top-full"
+            onMouseEnter={() => setShowServices(true)}
+            onMouseLeave={() => setShowServices(false)}
+          >
+            <div className="max-w-7xl mx-auto">
+              <ServicesDropdown services={services} />
+            </div>
+          </div>
+        )}
       </header>
 
       <MobileMenu
@@ -127,6 +232,13 @@ export default function Header() {
         services={services}
         onToggleLang={onToggleLang}
         lang={lang}
+        onMobileSearch={(q?: string) => {
+          if (q) {
+            dispatch(setSearchQuery(q) as any);
+            router.push(`/search?q=${encodeURIComponent(q)}`);
+            setMobileOpen(false);
+          }
+        }}
       />
     </>
   );

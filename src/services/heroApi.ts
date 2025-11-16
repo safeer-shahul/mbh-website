@@ -1,3 +1,5 @@
+//src/services/heroApi.ts
+
 import api from "./api";
 import { getLangCookie } from "@/utils/cookies";
 

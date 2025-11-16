@@ -1,3 +1,5 @@
+// src/i18n/index.ts
+
 "use client";
 
 import i18n from "i18next";
