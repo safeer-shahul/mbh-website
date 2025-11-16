@@ -51,7 +51,7 @@ export default async function ServiceDetailPage(props: any) {
           {service.sections?.map((section: any) => (
             <div 
               key={section.id} 
-              className="border-l-3 border-gray-200 pl-6 py-2 bg-gray-50/50"
+              className="border-s-3 border-gray-200 ps-6 py-2 bg-gray-50/50"
             >
               <div className="flex items-start gap-3 mb-4">
                 <span className="block mt-[6px] w-2 h-2 bg-[var(--color-brown)] flex-shrink-0"></span>
