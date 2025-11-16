@@ -43,7 +43,7 @@ export default function ServiceSearchResults({ query, page, onPageChange }: any)
     <div>
       {items.map((s) => (
        
-        <div key={s.id} className="py-5 border-b">
+        <div key={s.id} className="py-5 border border-gray-200">
           <Link href={`/services/${s.slug}`} className="text-lg font-semibold">
             {s.title}
           </Link>

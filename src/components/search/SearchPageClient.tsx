@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import TeamSearchResults from "./TeamSearchResults";
 import ServiceSearchResults from "./ServiceSearchResults";
 import { getServiceResults, getTeamResults } from "@/services/searchApi";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 
 export default function SearchPageClient({
     initialQuery,
@@ -30,6 +32,8 @@ export default function SearchPageClient({
         router.push(`/search?q=${query}&tab=${nextTab}&page=${nextPage}`);
     };
 
+    const lang = useSelector((state: RootState) => state.language.lang);
+    
     useEffect(() => {
         setQuery(urlQuery);
         setTab(urlTab);
@@ -38,19 +42,19 @@ export default function SearchPageClient({
 
     useEffect(() => {
         setLoaded(false);
-
+    
         Promise.all([
-            getTeamResults({ q: query, page: 1, pageSize: 1 }),
-            getServiceResults({ q: query, page: 1, pageSize: 1 }),
+            getTeamResults({ q: query, page: 1, pageSize: 1, lang }),
+            getServiceResults({ q: query, page: 1, pageSize: 1, lang }),
         ]).then(([teamRes, serviceRes]) => {
             const tCount = teamRes.meta.total || 0;
             const sCount = serviceRes.meta.total || 0;
-
+    
             setTeamCount(tCount);
             setServiceCount(sCount);
-
+    
             const urlHasTab = params.has("tab");
-
+    
             if (!urlHasTab) {
                 if (sCount > 0) {
                     setTab("services");
@@ -60,10 +64,10 @@ export default function SearchPageClient({
                     updateURL("team", 1);
                 }
             }
-
+    
             setLoaded(true);
         });
-    }, [query]);
+    }, [query, lang]);
 
     if (!loaded)
         return (
